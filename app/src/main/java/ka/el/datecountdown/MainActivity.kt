@@ -2,13 +2,20 @@ package ka.el.datecountdown
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 
 class MainActivity : AppCompatActivity() {
+    // TODO: делать запись в кеш о устаноавленной дате и при перезаходе устанавливать её
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        initFields()
+    }
+
+    private fun initFields() {
+
     }
 
     fun changeDate(view: View) {
@@ -32,6 +39,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateUI() {
-        TODO("Not yet implemented")
+
     }
 }
