@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -22,15 +23,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var hoursValue: TextView
     private lateinit var minutesValue: TextView
     private lateinit var secondsValue: TextView
+    private lateinit var timeTo: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        initFields()
 
         preferences = getPreferences(Context.MODE_PRIVATE)
         getDateTo()
 
-        initFields()
     }
 
     private fun initFields() {
@@ -38,6 +40,8 @@ class MainActivity : AppCompatActivity() {
         hoursValue = findViewById(R.id.hoursValue)
         minutesValue = findViewById(R.id.minutesValue)
         secondsValue = findViewById(R.id.secondsValue)
+
+        timeTo = findViewById(R.id.timeTo)
     }
 
     private fun getDateTo() {
@@ -47,22 +51,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateTimeTo() {
+        timeTo.text = sdf.format(countToDate)
+    }
+
     private fun startTimer() {
+        updateTimeTo()
         currentDate = getCurrentDate()
         val difMSeconds = countToDate - currentDate
         if (difMSeconds > 10) {
             timer = CountDownTimerApp(
                 difMSeconds,
-                { onTickTimer() },
+                { last -> onTickTimer(last) },
                 { finishTimer() })
             timer?.start()
         }
     }
 
-    private fun onTickTimer() {
-        var currentDate = getCurrentDate()
-        val diffs = getDiffBetween(countToDate, currentDate)
-        updateUI(diffs)
+    private fun onTickTimer(last: Long) {
+        val date = millisecondsToMap(last / 1000)
+        updateUI(date)
     }
 
 
@@ -101,10 +109,8 @@ class MainActivity : AppCompatActivity() {
         month: Int,
         year: Int
     ) {
-        countToDate = sdf.parse("$day-$month-$year $hours:$minutes").time
+        countToDate = sdf.parse("$day.$month.$year $hours:$minutes").time
         saveDate(countToDate)
-
-        currentDate = getCurrentDate()
 
         timer?.cancel()
         startTimer()

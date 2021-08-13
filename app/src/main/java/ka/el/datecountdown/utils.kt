@@ -1,5 +1,6 @@
 package ka.el.datecountdown
 
+import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -13,15 +14,18 @@ const val secondsInHour = 60 * 60
 const val secondsInMinute = 60
 
 
-val sdf = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault())
+val sdf = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
 
 const val CURRENT_DATE_KEY = "current_date"
 
 fun getDiffBetween(countToDate: Long, currentDate: Long): Map<String, Long> {
     val dif = (countToDate - currentDate) / 1000
+    return millisecondsToMap(dif)
+}
 
-    val daysLast = dif / (secondsInDay)
-    val difBeforeDays = dif - (daysLast * secondsInDay)
+fun millisecondsToMap(time: Long): Map<String, Long> {
+    val daysLast = time / (secondsInDay)
+    val difBeforeDays = time - (daysLast * secondsInDay)
 
     val hoursLast = difBeforeDays / (secondsInHour)
     val difBeforeHours = difBeforeDays - (hoursLast * secondsInHour)
@@ -29,7 +33,11 @@ fun getDiffBetween(countToDate: Long, currentDate: Long): Map<String, Long> {
     val minutesLast = difBeforeHours / secondsInMinute
     val difBeforeMinutes = difBeforeHours - (minutesLast * secondsInMinute)
 
-    val secondsLast = dif - difBeforeDays - difBeforeHours - difBeforeMinutes // Need fix
+    Log.d("UPDATE", "daysLast: ${daysLast}, difBeforeDays: $difBeforeDays")
+    Log.d("UPDATE", "hoursLast: ${hoursLast}, difBeforeDays: $difBeforeDays")
+    Log.d("UPDATE", "minutesLast: ${minutesLast}, difBeforeMinutes: $difBeforeMinutes")
+
+    val secondsLast = difBeforeMinutes // Need fix
 
     return mapOf(
         DAYS to daysLast,
@@ -48,5 +56,5 @@ fun getCurrentDate(): Long {
     val chours = calendar.get(Calendar.HOUR_OF_DAY)
     val cminutes = calendar.get(Calendar.MINUTE)
 
-    return sdf.parse("$cday-$cmonth-$cyear $chours:$cminutes").time
+    return sdf.parse("$cday.$cmonth.$cyear $chours:$cminutes").time
 }
