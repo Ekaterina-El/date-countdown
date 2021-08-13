@@ -12,10 +12,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun changeDate(view: View) {
-        val datePicker = DatePickerFragment() { hoursOfDay, minutes ->
-            Log.d("DATE_COUNT", "hourOfDay: $hoursOfDay | minute: $minutes")
+        val timePicker = TimePickerFragment() { hoursOfDay, minutes ->
+            val datePicker = DatePickerFragment() { year, month, day ->
+                startNewCountdown(hoursOfDay, minutes, day, month, year)
+            }
+            datePicker.show(supportFragmentManager, "datePicker")
         }
-        datePicker.show(supportFragmentManager, "timePicker")
+        timePicker.show(supportFragmentManager, "timePicker")
+    }
 
+    private fun startNewCountdown(
+        hours: Int,
+        minutes: Int,
+        day: Int,
+        month: Int,
+        year: Int
+    ) {
+        updateUI()
+    }
+
+    private fun updateUI() {
+        TODO("Not yet implemented")
     }
 }
