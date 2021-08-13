@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Date countdown</string>
+    <string name="hours_subhead">Hours</string>
+    <string name="days_subhead">Days</string>
+    <string name="hours_def">00</string>
+    <string name="hours_def">00</string>
+    <string name="days_def">00</string>
+    <string name="minutes_def">00</string>
+    <string name="minutes_subhead">Minutes</string>
+    <string name="seconds_def">00</string>
+    <string name="seconds_subhead">Seconds</string>
 </resources>
